@@ -1,7 +1,7 @@
 class BulkWarehouse:
     def __init__(self):
         self.item_count = 0 
-        self.max_capacity = 30 # รองรับ 15 ช่อง x 2 ชั้น
+        self.max_capacity = 30
         print("--- Tier 1 BulkWarehouse System Initialized ---")
 
     def find_empty_slot(self):
