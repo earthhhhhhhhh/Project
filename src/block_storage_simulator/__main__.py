@@ -1,14 +1,10 @@
-"""CLI entry point for the simulator."""
-
 from __future__ import annotations
-
 import argparse
 import time
-
 from .ads_server import AdsServer
 from .gui import SimulatorApp
 from .simulator import BlockStorageSimulator
-
+from .tier2_warehouse import Tier2Warehouse 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Block storage simulator")
@@ -35,6 +31,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_parser().parse_args()
     simulator = BlockStorageSimulator()
+    simulator.warehouse = Tier2Warehouse()
+    
     server: AdsServer | None = None
 
     if args.mode in {"ads", "both"}:
@@ -43,6 +41,18 @@ def main() -> None:
 
     if args.mode in {"gui", "both"}:
         app = SimulatorApp(simulator)
+
+        def handle_add_block():
+            slot = simulator.warehouse.find_empty_slot()
+            if slot:
+                row, col = slot
+                simulator.move_block_to_storage(row, col)
+                simulator.warehouse.add_item()
+            else:
+                print("Warehouse is full!")
+
+        app.on_add_click = handle_add_block
+
         try:
             app.run()
         finally:
