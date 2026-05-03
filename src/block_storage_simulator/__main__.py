@@ -1,34 +1,3 @@
-from __future__ import annotations
-import argparse
-import time
-from .ads_server import AdsServer
-from .gui import SimulatorApp
-from .simulator import BlockStorageSimulator
-from .tier2_warehouse import Tier2Warehouse
-from block_storage_simulator import simulator 
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Block storage simulator")
-    parser.add_argument(
-        "--mode",
-        choices=("gui", "ads", "both"),
-        default="gui",
-        help="Run the local GUI, the ADS server, or both.",
-    )
-    parser.add_argument(
-        "--bind",
-        default="127.0.0.1",
-        help="IP address to bind the ADS server to when ADS mode is enabled.",
-    )
-    parser.add_argument(
-        "--port",
-        type=int,
-        default=48898,
-        help="TCP port for the ADS server.",
-    )
-    return parser
-
-
 def main() -> None:
     args = build_parser().parse_args()
     simulator = BlockStorageSimulator()
@@ -43,16 +12,15 @@ def main() -> None:
     if args.mode in {"gui", "both"}:
         app = SimulatorApp(simulator)
 
- def handle_add_block():
-  
-    slot = simulator.warehouse.find_empty_slot() 
-    if slot:
-        row, col = slot
-        simulator.add_block_to_home_pallet() 
-        simulator.move_block_to_storage(row, col)
-        simulator.warehouse.add_item()
-    else:
-        print("Warehouse is full!")
+        def handle_add_block():
+            slot = simulator.warehouse.find_empty_slot() 
+            if slot:
+                row, col = slot
+                simulator.add_block_to_home_pallet() 
+                simulator.move_block_to_storage(row, col)
+                simulator.warehouse.add_item()
+            else:
+                print("Warehouse is full!")
 
         app.on_add_click = handle_add_block
 
@@ -69,7 +37,3 @@ def main() -> None:
     except KeyboardInterrupt:
         if server is not None:
             server.stop()
-
-
-if __name__ == "__main__":
-    main()
