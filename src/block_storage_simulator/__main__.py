@@ -4,7 +4,8 @@ import time
 from .ads_server import AdsServer
 from .gui import SimulatorApp
 from .simulator import BlockStorageSimulator
-from .tier2_warehouse import Tier2Warehouse 
+from .tier2_warehouse import Tier2Warehouse
+from block_storage_simulator import simulator 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Block storage simulator")
@@ -42,14 +43,16 @@ def main() -> None:
     if args.mode in {"gui", "both"}:
         app = SimulatorApp(simulator)
 
-        def handle_add_block():
-            slot = simulator.warehouse.find_empty_slot()
-            if slot:
-                row, col = slot
-                simulator.move_block_to_storage(row, col)
-                simulator.warehouse.add_item()
-            else:
-                print("Warehouse is full!")
+ def handle_add_block():
+  
+    slot = simulator.warehouse.find_empty_slot() 
+    if slot:
+        row, col = slot
+        simulator.add_block_to_home_pallet() 
+        simulator.move_block_to_storage(row, col)
+        simulator.warehouse.add_item()
+    else:
+        print("Warehouse is full!")
 
         app.on_add_click = handle_add_block
 
