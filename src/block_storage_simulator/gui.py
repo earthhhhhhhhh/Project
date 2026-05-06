@@ -127,16 +127,24 @@ class SimulatorApp:
         self.simulator.reset()
         self.refresh()
 
+    # แก้ในไฟล์ gui.py
     def _add_home_pallet_block(self) -> None:
-        self.simulator.add_block_to_home_pallet()
-        if hasattr(self.simulator, 'warehouse'):
-            self.simulator.warehouse.add_item()
+        """เรียกเมื่อกดปุ่ม Add ในหน้า GUI"""
+        # เช็คว่ามีการผูก handle_add_block (Logic ของเรา) ไว้ไหม
+        if hasattr(self, 'on_add_click') and self.on_add_click:
+            self.on_add_click() 
+        else:
+            # ถ้าไม่มี ให้เรียกคำสั่งพื้นฐานของ Simulator Core (ไฟล์ที่คุณเพิ่งส่งมา)
+            self.simulator.add_block_to_home_pallet()
         self.refresh()
 
     def _remove_home_pallet_block(self) -> None:
-        self.simulator.remove_block_from_home_pallet()
-        if hasattr(self.simulator, 'warehouse'):
-            self.simulator.warehouse.remove_item()
+        """เรียกเมื่อกดปุ่ม Remove ในหน้า GUI"""
+        if hasattr(self, 'on_remove_click') and self.on_remove_click:
+            self.on_remove_click()
+        else:
+            # เรียกคำสั่งพื้นฐานจาก simulator.py
+            self.simulator.remove_block_from_home_pallet()
         self.refresh()
 
     def _poll_refresh(self) -> None:
