@@ -1,9 +1,15 @@
 class BulkWarehouse:
     def __init__(self):
+<<<<<<< HEAD
         # ปรับให้เหลือช่องที่วางได้จริง (ลองทดสอบที่ 2x2 หรือ 2x3 ดูก่อนครับ)
         self.rows = 3  # แถวแนวตั้ง
         self.cols = 4  # แถวแนวนอน (Simulator พื้นที่แนวนอนจะยาวกว่า)
         self.max_layers = 1
+=======
+        self.rows = 3
+        self.cols = 4
+        self.max_layers = 1 # Tier 1 ปกติเน้นชั้นเดียวแบบ Bulk
+>>>>>>> tier2_warehouse
         self.grid = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
         self.total_items = 0
         print(f"--- [System] {self.__class__.__name__} Initialized ---")
